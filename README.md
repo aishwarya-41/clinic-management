@@ -3,27 +3,6 @@ Clinic Management System
 Project Description
 The Clinic Management System is a web-based application that facilitates communication between doctors and receptionists. The system allows doctors to examine patient details and receptionists to assign tokens, create charges, and generate billing advice. The project is developed using HTML, CSS, JavaScript, and Firebase.
 
-Directory Structure
-
-clinic-management/
-│
-├── public/
-│   ├── components/
-│   │   ├── doctor-dashboard.html
-│   │   ├── receptionist-dashboard.html
-│   │   ├── logout.html
-│   ├── css/
-│   │   ├── doctor-dashboard.css
-│   │   ├── receptionist-dashboard.css
-│   │   ├── main.css
-│   ├── index.html
-│
-├── src/
-│   ├── firebaseConfig.js
-│   ├── auth.js
-│
-├── README.md
-
 
 Features
 Doctor Dashboard
@@ -60,3 +39,16 @@ UI/UX Tests
 Responsive Design: Checked that the interface is responsive and works well on various screen sizes.
 User Interface Elements: Ensured all buttons, inputs, and displays are styled correctly and enhance user experience.
 Accessibility: Confirmed that form inputs and buttons are accessible and navigable using a keyboard.
+
+Technologies Used
+- Frontend: HTML, CSS, JavaScript
+- Backend: Firebase
+- Version Control: Git, GitHub
+
+  Setup
+To set up the project locally:
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/aishwarya-41/clinic-management.git
+   cd clinic-management
