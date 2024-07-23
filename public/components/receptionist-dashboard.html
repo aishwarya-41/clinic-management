@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist Dashboard</title>
+    <link rel="stylesheet" href="../css/receptionist-dashboard.css">
+</head>
+<body>
+    <div class="receptionist-dashboard">
+        <h1>Receptionist Dashboard</h1>
+
+        <!-- Generate Token Form -->
+        <form id="patient-form">
+            <input type="text" id="patient-name" placeholder="Patient Name" required>
+            <input type="email" id="patient-email" placeholder="Patient Email" required>
+            <input type="text" id="patient-prescription" placeholder="Prescription" required>
+            <button type="submit">Generate Token</button>
+        </form>
+
+        <!-- Generate Bill Form -->
+        <form id="bill-form">
+            <input type="text" id="bill-patient-name" placeholder="Patient Name" required>
+            <input type="number" id="bill-charges" placeholder="Charges" required>
+            <input type="text" id="bill-status" placeholder="Status (e.g., unpaid)" required>
+            <input type="date" id="bill-date" required>
+            <button type="submit">Generate Bill</button>
+        </form>
+
+        <!-- Tokens List -->
+        <div id="patient-list">
+            <h2>Patient Tokens</h2>
+        </div>
+
+        <!-- Bills List -->
+        <div id="bill-list">
+            <h2>Generated Bills</h2>
+        </div>
+    </div>
+    
+    <button id="logout-link">Logout</button>
+
+    <script type="module">
+        import { auth, db } from '../../src/firebaseConfig.js';
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+        import { collection, getDocs, addDoc } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+        // Generate Token
+        document.getElementById('patient-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const patientName = document.getElementById('patient-name').value;
+            const patientEmail = document.getElementById('patient-email').value;
+            const patientPrescription = document.getElementById('patient-prescription').value;
+            const token = Math.floor(Math.random() * 10000);
+
+            try {
+                await addDoc(collection(db, 'patients'), {
+                    name: patientName,
+                    email: patientEmail,
+                    prescription: patientPrescription,
+                    token: token
+                });
+                window.location.reload();
+            } catch (error) {
+                console.error("Error adding patient:", error);
+            }
+        });
+
+        // Generate Bill
+        document.getElementById('bill-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const patientName = document.getElementById('bill-patient-name').value;
+            const charges = parseFloat(document.getElementById('bill-charges').value);
+            const status = document.getElementById('bill-status').value;
+            const dateInput = document.getElementById('bill-date').value;
+
+            // Convert date to a more readable format
+            const date = new Date(dateInput);
+            const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+
+            try {
+                await addDoc(collection(db, 'bills'), {
+                    name: patientName,
+                    charges: charges,
+                    status: status,
+                    date: formattedDate
+                });
+                window.location.reload();
+            } catch (error) {
+                console.error("Error adding bill:", error);
+            }
+        });
+
+        // Load Data
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Load Patients
+                const patientSnapshot = await getDocs(collection(db, 'patients'));
+                const patientList = document.getElementById('patient-list');
+                patientSnapshot.forEach((doc) => {
+                    const patient = doc.data();
+                    const patientDiv = document.createElement('div');
+                    patientDiv.className = 'patient';
+                    patientDiv.innerHTML = `
+                        <p>Name: ${patient.name}</p>
+                        <p>Email: ${patient.email}</p>
+                        <p>Prescription: ${patient.prescription}</p>
+                        <p>Token: ${patient.token}</p>
+                    `;
+                    patientList.appendChild(patientDiv);
+                });
+
+                // Load Bills
+                const billSnapshot = await getDocs(collection(db, 'bills'));
+                const billList = document.getElementById('bill-list');
+                billSnapshot.forEach((doc) => {
+                    const bill = doc.data();
+                    const billDiv = document.createElement('div');
+                    billDiv.className = 'bill';
+                    billDiv.innerHTML = `
+                        <p>Name: ${bill.name}</p>
+                        <p>Charges: ${bill.charges}</p>
+                        <p>Status: ${bill.status}</p>
+                        <p>Date: ${bill.date}</p>
+                    `;
+                    billList.appendChild(billDiv);
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+
+        // Logout
+        document.getElementById('logout-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = '../index.html'; // Redirect to the main page
+            } catch (error) {
+                console.error("Sign out error:", error.message);
+            }
+        });
+    </script>
+</body>
+</html>

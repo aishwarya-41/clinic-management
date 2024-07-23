@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="../css/doctor-dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Doctor Dashboard</h1>
+    </header>
+    <nav>
+        <a href="#" id="logout-link">Logout</a>
+    </nav>
+    <div id="patient-info">
+        <!-- Patient information will be loaded here -->
+    </div>
+    <script type="module" src="../../src/firebaseConfig.js"></script>
+    <script type="module">
+        import { auth, db } from '../../src/firebaseConfig.js';
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+        import { getDocs, collection } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+        async function loadPatientInfo() {
+            const querySnapshot = await getDocs(collection(db, "patients"));
+            const patientInfoDiv = document.getElementById('patient-info');
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const patientElement = document.createElement('div');
+                patientElement.innerHTML = `
+                    <h2>Patient: ${data.name}</h2>
+                    <p>Email: ${data.email}</p>
+                    <p>Prescription: ${data.prescription}</p>
+                    <p>Token: ${data.token}</p>
+                `;
+                patientInfoDiv.appendChild(patientElement);
+            });
+        }
+        document.getElementById('logout-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = '../index.html'; // Redirect to the main page
+            } catch (error) {
+                console.error("Sign out error:", error.message);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', loadPatientInfo);
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Very light blue background */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.receptionist-dashboard {
+    background-color: #ffffff;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #0056b3; /* Dark blue */
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+form {
+    margin-bottom: 2rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"] {
+    width: calc(100% - 2rem);
+    padding: 0.5rem;
+    margin: 0.5rem auto;
+    border: 1px solid #0056b3; /* Dark blue border */
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff; /* Bright blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3; /* Dark blue */
+}
+
+#patient-list,
+#bill-list {
+    margin-top: 2rem;
+}
+
+.patient,
+.bill {
+    background-color: #e9f5ff; /* Light blue background for each entry */
+    border: 1px solid #cce0ff; /* Light blue border */
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.patient p,
+.bill p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
