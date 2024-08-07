@@ -52,3 +52,5 @@ To set up the project locally:
    ```bash
    git clone https://github.com/aishwarya-41/clinic-management.git
    cd clinic-management
+
+To run this code, I used visual studio code.
